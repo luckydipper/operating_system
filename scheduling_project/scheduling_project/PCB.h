@@ -1,5 +1,5 @@
-#ifndef PCB
-#define PCB
+#ifndef PCB_HEADER
+#define PCB_HEADER
 enum class Status
 {
     new_,
@@ -20,17 +20,24 @@ class ProcessControlBlock
 {
     static int PCB_num;
     const int process_id;
+    bool have_IO;
     Priority priority;
     Status state;
     ProcessControlBlock* next_pcb;
-    char const environment_variable[256] = { 0 }; 
+    char const environment_variable[256] = { 0 };
 
 public:
-    ProcessControlBlock();
-    explicit ProcessControlBlock(const Priority prior);
+    //ProcessControlBlock();
+    explicit ProcessControlBlock(const Priority prior, const bool has_IO);
+    explicit ProcessControlBlock(const ProcessControlBlock& PCB);
     ~ProcessControlBlock();
     void PrintStatus() const;
-    void SetPointer(ProcessControlBlock* ptr_Pcb);
+    void SetStatus(const Status stat);
+    bool HaveIO()const;
+    Priority GetPrior()const;
+    void SetPrior(const Priority& p);
+    void SetNextPointer(ProcessControlBlock* const ptr_Pcb);
+    ProcessControlBlock* GetNextPointer() const;
 };
 
 #endif // PCB
