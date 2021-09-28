@@ -27,13 +27,15 @@ class ProcessControlBlock
     char const environment_variable[256] = { 0 };
 
 public:
-    //ProcessControlBlock();
+    explicit ProcessControlBlock();
     explicit ProcessControlBlock(const Priority prior, const bool has_IO);
     explicit ProcessControlBlock(const ProcessControlBlock& PCB);
     ~ProcessControlBlock();
     void PrintStatus() const;
     void SetStatus(const Status stat);
     bool HaveIO()const;
+    void SetHaveIO(const bool b);
+    int GetPID()const;
     Priority GetPrior()const;
     void SetPrior(const Priority& p);
     void SetNextPointer(ProcessControlBlock* const ptr_Pcb);

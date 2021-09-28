@@ -13,6 +13,8 @@ int ProcessControlBlock::PCB_num = 0;
 //    state = Status::new_;
 //}
 
+ProcessControlBlock::ProcessControlBlock() : process_id(PCB_num) { }
+
 ProcessControlBlock::ProcessControlBlock(const Priority prior, const bool has_IO) : priority(prior), process_id(PCB_num), have_IO(has_IO) // const를 runtime에 결정하는 유일한 방법은 initialized list
 {
     cout << "Process constructed" << endl;
@@ -22,7 +24,7 @@ ProcessControlBlock::ProcessControlBlock(const Priority prior, const bool has_IO
 }
 ProcessControlBlock::ProcessControlBlock(const ProcessControlBlock& PCB) : process_id(PCB_num)
 {
-    cout << "Process constructed" << endl;
+    cout << "Process constructed. constructed PCB ID : " << this->GetPID() << endl;
     PCB_num++;
     next_pcb = nullptr;
     state = Status::new_;
@@ -32,12 +34,22 @@ ProcessControlBlock::ProcessControlBlock(const ProcessControlBlock& PCB) : proce
 
 ProcessControlBlock::~ProcessControlBlock()
 {
-    cout << "Process exit" << endl;
+    cout << "Process completed. delete PCB ID : " << this->GetPID() << endl;
 }
 
 bool ProcessControlBlock::HaveIO()const
 {
     return have_IO;
+}
+
+void ProcessControlBlock::SetHaveIO(const bool b)
+{
+    have_IO = b;
+}
+
+int ProcessControlBlock::GetPID()const
+{
+    return process_id;
 }
 
 Priority ProcessControlBlock::GetPrior()const
