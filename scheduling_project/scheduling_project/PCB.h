@@ -16,25 +16,36 @@ enum class Priority
     high
 };
 
+enum class IOStatus
+{
+    no,
+    exist,
+    doing,
+    done
+};
+
 class ProcessControlBlock
 {
     static int PCB_num;
-    const int process_id;
-    bool have_IO;
+    int process_id;
+    IOStatus have_IO;
+    bool is_in_RAM;
     Priority priority;
     Status state;
     ProcessControlBlock* next_pcb;
     char const environment_variable[256] = { 0 };
 
 public:
-    explicit ProcessControlBlock();
-    explicit ProcessControlBlock(const Priority prior, const bool has_IO);
+    //explicit ProcessControlBlock();
+    explicit ProcessControlBlock(const Priority prior, const IOStatus has_IO);
     explicit ProcessControlBlock(const ProcessControlBlock& PCB);
     ~ProcessControlBlock();
     void PrintStatus() const;
     void SetStatus(const Status stat);
-    bool HaveIO()const;
-    void SetHaveIO(const bool b);
+    IOStatus HaveIO()const;
+    void SetHaveIO(const IOStatus b);
+    bool IsInRam()const;
+    void SetRamState(const bool b);
     int GetPID()const;
     Priority GetPrior()const;
     void SetPrior(const Priority& p);

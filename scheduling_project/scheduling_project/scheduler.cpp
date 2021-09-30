@@ -1,4 +1,7 @@
-// TODO : Pop and Push from job queue 구조가 비슷함.
+// TODO : Pop and Push from job queue 구조가 비슷함. 중복 제거
+// TODO : Next를 가르키는 pointer, 즉 Node 안의 pointer는 모두 동적할당 해야할 것 같다. 가능한가? new는 생성자를 호출하는데 생성자 안에서 생성자를 호출하는게?
+// TODO : 만약 생성자 안에 pointer에 new가 들어간다면, 복사 생성자에 new를 해서 stack에 있는 객체를 heap으로 가져와야할 이유가 있나?
+// TODO : reference는 return과 parameter에 쓰자. 하지만 iteration은 안되니, 이땐 pointer를 쓰자.
 // QUEUE로 따로 구현해놓고 JOB READY DEVICE 나눌껄...
 // Load PCB에서 동적할당을 한번에 진행하
 // CPU에서 각각 free
@@ -11,7 +14,7 @@
         //ready_length--;
         //return temp; //new malloc으로 받은 object여서 dangling pointer 안 일어남.
         //}
-
+#include <assert.h>
 #include "scheduler.h"
 #include <iostream>
 #include <stdbool.h>
@@ -21,7 +24,7 @@ using namespace std;
 Scheduler::Scheduler() : job_length(0), ready_length(0), device_length(0),
 job_front(nullptr), job_rear(nullptr),
 ready_front(nullptr), ready_rear(nullptr),
-device_front(nullptr),device_rear(nullptr)
+device_front(nullptr), device_rear(nullptr)
 { cout << "queue made" << endl; };
 
 Scheduler::~Scheduler() { cout << "queue deleted" << endl; }
@@ -56,19 +59,28 @@ void Scheduler::JobPush(const ProcessControlBlock &PCB)
 // 지우는 과정을 넣지 않았음..
 ProcessControlBlock* Scheduler::JobPop()
 {
-    ProcessControlBlock* temp = job_front; 
-    job_front = job_front->GetNextPointer();
-    job_length--;
-    temp->SetNextPointer(nullptr);
-    return temp; //new malloc으로 받은 object여서 dangling pointer 안 일어남.
+    ProcessControlBlock* temp = job_front;  //reference를 썼다면? job front가 바뀌면서 같이 바뀌었겠지? iteration 안 될 듯?
+    
+    while (temp->IsInRam())
+    {
+        if (temp == nullptr)
+            return job_front;
+        temp = temp->GetNextPointer();
+    };
+    //여기서 return 할것 copy해주면, ready push에서 copy 불가.
+    return temp; // dangling pointer 안 일어남??? object 안의 값을 가진 pointer나 new malloc으로 받은 object
 }
 
 // change status ready
-void Scheduler::ReadyPush(const ProcessControlBlock& PCB)
+void Scheduler::ReadyPush(ProcessControlBlock& PCB)
 {
-    
-    ProcessControlBlock* ptr_PCB = (ProcessControlBlock*)&PCB;
-    ptr_PCB->SetStatus(Status::ready);
+    //already in ReadyQueue
+    if (PCB.IsInRam() && PCB.HaveIO()!= IOStatus::done)
+        return;
+
+    PCB.SetStatus(Status::ready);
+    PCB.SetRamState(true);
+    ProcessControlBlock* ptr_PCB = &PCB;
     if (ready_length == 0)
         ready_front = ready_rear = ptr_PCB;
     else
@@ -109,7 +121,7 @@ ProcessControlBlock* Scheduler::DevicePop()
     device_front = device_front->GetNextPointer();
     device_length--;
     temp->SetNextPointer(nullptr);
-    temp->SetHaveIO(false);
+    temp->SetHaveIO(IOStatus::done);
     return temp; //new malloc으로 받은 object여서 dangling pointer 안 일어남.
 }
 
@@ -118,18 +130,21 @@ void Scheduler::LongTermScheduling()
 {
     if (job_length == 0)
         return;
-    ReadyPush(*JobPop());
+    //ReadyPush(*JobPop()); 바로 넣으면 임시객체
+    ProcessControlBlock* temp = JobPop();
+    //ProcessControlBlock copied_PCB{ *temp }; //copy construction dynamic allocation //생성된 객체를 return 한다.
+    ProcessControlBlock* copied_PCB = new ProcessControlBlock(*temp);
+    copied_PCB->SetNextPointer(nullptr);
+    ReadyPush(*copied_PCB); // 여기서 바로 해제됨.  //애초에 생성자 호출하는게 
 }
+//new는 stack에서 빠져 나올때 delete 되잖아? stack 2개라서 해제되는 것은 아니야. 
 
 void Scheduler::ShortTermScheduling()
 {
     if (ready_length == 0)
         return;
-    ProcessControlBlock* from_ready = ReadyPop();
-    if (from_ready->HaveIO())
-        DevicePush(*from_ready); 
-    else
-        CpuProcess(*from_ready);
+    ProcessControlBlock* from_ready = ReadyPop(); // 객체를 생성하지 않아 소멸자가 호출되지 않음.
+    CpuProcess(*from_ready);
 }
 
 //change IO status
@@ -140,10 +155,20 @@ void Scheduler::IOScheduling()
     ReadyPush(*DevicePop());
 }
 
-void Scheduler::CpuProcess(const ProcessControlBlock& PCB)
+void Scheduler::CpuProcess(ProcessControlBlock& PCB)
 {
     cout << "Process PID : " << PCB.GetPID() << " Runing." << endl;
-    delete &PCB;
+
+    if (PCB.HaveIO()==IOStatus::exist)
+    {
+        cout << "Process PID : " << PCB.GetPID() << " has IO." << endl;
+        DevicePush(PCB);
+    }
+    else
+    {
+        DeleteJobQueueItem(PCB); // Delete PCB in queue
+        delete& PCB;
+    }
 }
 
 void Scheduler::PrintQueue() const
@@ -191,4 +216,21 @@ bool Scheduler::IsEmpty()const
         return true;
     else
         return false;
+}
+
+void Scheduler::DeleteJobQueueItem(ProcessControlBlock& PCB)
+{
+    ProcessControlBlock* iterator = job_front;
+    while (iterator != nullptr)
+    {
+        if (iterator == &PCB)
+        {
+            ProcessControlBlock* temp_del = iterator;
+            iterator = iterator->GetNextPointer();
+            delete temp_del;
+            return;
+        }
+        iterator = iterator->GetNextPointer();
+    }
+    assert(true);//memorry leak
 }

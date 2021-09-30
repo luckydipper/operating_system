@@ -5,14 +5,6 @@
 // Job Queue Ready Queue Device Queue
 class Scheduler
 {
-    // static const int JOB_MAX_LENTH = 16; // 모든 객체가 같은 값을 공유해야 함으로 static const
-    // static const int READY_MAX_LENTH = 8;
-    // static const int DEVICE_MAX_LENTH = 4;
-    
-    // ProcessControlBlock job_queue[JOB_MAX_LENTH];
-    // ProcessControlBlock ready_queue[READY_MAX_LENTH];
-    // ProcessControlBlock device_queue[DEVICE_MAX_LENTH];
-
     ProcessControlBlock *job_front,    *job_rear;
     ProcessControlBlock *ready_front,  *ready_rear;
     ProcessControlBlock *device_front, *device_rear;
@@ -25,29 +17,30 @@ public:
     explicit Scheduler();
     ~Scheduler();
 
-    void TimeExeption();
-
-    //!caution! you must put dynamic allocated PCB
-    void JobPush(const ProcessControlBlock& PCB);
-    ProcessControlBlock* JobPop();
-    void ReadyPush(const ProcessControlBlock& PCB); // status new -> ready
-    ProcessControlBlock* ReadyPop();
-    void DevicePush(const ProcessControlBlock& PCB); 
-    ProcessControlBlock* DevicePop(); // IO true -> false
-
+    // LEVLE1 API
     void LongTermScheduling(); // Job queue-> ready queue
     void ShortTermScheduling();
     void IOScheduling();
-    
-    void CpuProcess(const ProcessControlBlock& PCB); // status runing -> terminated 
-
-    void PrintQueue() const; // print Job ready device queue status
-    //void SortQueue(); // call Job ready device queue sort
-    //void Scheduling(); // update queue
-
-    //Stack to Heap.. malloc Node
-    void LoadPCBs(ProcessControlBlock const &pcbs);
+    void TimeExeption();
+    void LoadPCBs(ProcessControlBlock const& pcbs); //Stack to Heap.. malloc Node
     bool IsEmpty()const;
+    
+    //void SortQueue(); // call Job ready device queue sort
+
+    // LEVEL2 API
+    //!caution! you must put dynamic allocated PCB
+    void JobPush(const ProcessControlBlock& PCB);
+    ProcessControlBlock* JobPop(); //If PCB hasn't dispatched, Job QUEUE not deleted. 
+
+    void ReadyPush(ProcessControlBlock& PCB); //PCB status chagne, new -> ready, is_in_ram -> true
+    ProcessControlBlock* ReadyPop();
+    void DevicePush(const ProcessControlBlock& PCB); 
+    ProcessControlBlock* DevicePop(); // IO true -> false
+    void CpuProcess(ProcessControlBlock& PCB); //free PCB // status runing -> terminated 
+    void PrintQueue() const; // print Job ready device queue status
+    // LEVEL3 API
+    void DeleteJobQueueItem(ProcessControlBlock& PCB); //free PCB
+
 };
 
 #endif //scheduler

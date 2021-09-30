@@ -13,23 +13,24 @@ int ProcessControlBlock::PCB_num = 0;
 //    state = Status::new_;
 //}
 
-ProcessControlBlock::ProcessControlBlock() : process_id(PCB_num) { }
+//ProcessControlBlock::ProcessControlBlock() { }
 
-ProcessControlBlock::ProcessControlBlock(const Priority prior, const bool has_IO) : priority(prior), process_id(PCB_num), have_IO(has_IO) // const를 runtime에 결정하는 유일한 방법은 initialized list
+ProcessControlBlock::ProcessControlBlock(const Priority prior,const IOStatus has_IO) : priority(prior), process_id(PCB_num), have_IO(has_IO), is_in_RAM(false) // const를 runtime에 결정하는 유일한 방법은 initialized list
 {
-    cout << "Process constructed" << endl;
+    cout << "Dumy Process constructed. PID : "<< this->GetPID() << endl;
     PCB_num++;
     next_pcb = nullptr;
     state = Status::new_;
 }
-ProcessControlBlock::ProcessControlBlock(const ProcessControlBlock& PCB) : process_id(PCB_num)
+
+ProcessControlBlock::ProcessControlBlock(const ProcessControlBlock& PCB) : process_id(PCB.GetPID())
 {
     cout << "Process constructed. constructed PCB ID : " << this->GetPID() << endl;
-    PCB_num++;
     next_pcb = nullptr;
     state = Status::new_;
     have_IO = PCB.HaveIO();
     priority = PCB.GetPrior();
+    is_in_RAM = PCB.IsInRam();
 }
 
 ProcessControlBlock::~ProcessControlBlock()
@@ -37,14 +38,24 @@ ProcessControlBlock::~ProcessControlBlock()
     cout << "Process completed. delete PCB ID : " << this->GetPID() << endl;
 }
 
-bool ProcessControlBlock::HaveIO()const
+IOStatus ProcessControlBlock::HaveIO()const
 {
     return have_IO;
 }
 
-void ProcessControlBlock::SetHaveIO(const bool b)
+void ProcessControlBlock::SetHaveIO(const IOStatus b)
 {
     have_IO = b;
+}
+
+bool ProcessControlBlock::IsInRam()const
+{
+    return is_in_RAM;
+}
+
+void ProcessControlBlock::SetRamState(const bool b)
+{
+    is_in_RAM = b;
 }
 
 int ProcessControlBlock::GetPID()const
@@ -61,7 +72,6 @@ void ProcessControlBlock::SetPrior(const Priority& p)
 {
     priority = p;
 }
-
 
 
 void ProcessControlBlock::PrintStatus() const
