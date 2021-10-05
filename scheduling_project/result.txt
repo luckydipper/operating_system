@@ -1,18 +1,119 @@
-Process constructed
-Process constructed
-Process constructed
+Dumy Process constructed. PID : 0
+Dumy Process constructed. PID : 1
+Dumy Process constructed. PID : 2
 queue made
-Process constructed. constructed PCB ID : 3
-Process constructed. constructed PCB ID : 4
-Process constructed. constructed PCB ID : 5
+copy PCB ID : 0
+copy PCB ID : 1
+copy PCB ID : 2
 Time Interupt!
 press any key and enter
 --------------------------------
 In Job Queue:
- | 3 |  | 4 |  | 5 |
+ | 0 |  | 1 |  | 2 |
 
 In Ready Queue:
 
+
+In Device Queue:
+
+
+--------------------------------
+a
+copy PCB ID : 0
+Time Interupt!
+press any key and enter
+--------------------------------
+In Job Queue:
+ | 0 |  | 1 |  | 2 |
+
+In Ready Queue:
+ | 0 |
+
+In Device Queue:
+
+
+--------------------------------
+a
+Process PID : 0 Runing.
+Process PID : 0 has IO.
+start IO PID : 0
+--------------------------------
+In Job Queue:
+ | 0 |  | 1 |  | 2 |
+
+In Ready Queue:
+
+
+In Device Queue:
+ | 0 |
+
+--------------------------------
+Time Interupt!
+press any key and enter
+--------------------------------
+In Job Queue:
+ | 0 |  | 1 |  | 2 |
+
+In Ready Queue:
+
+
+In Device Queue:
+ | 0 |
+
+--------------------------------
+a
+end IO PID : 0
+Time Interupt!
+press any key and enter
+--------------------------------
+In Job Queue:
+ | 0 |  | 1 |  | 2 |
+
+In Ready Queue:
+ | 0 |
+
+In Device Queue:
+
+
+--------------------------------
+a
+copy PCB ID : 1
+Time Interupt!
+press any key and enter
+--------------------------------
+In Job Queue:
+ | 0 |  | 1 |  | 2 |
+
+In Ready Queue:
+ | 0 |  | 1 |
+
+In Device Queue:
+
+
+--------------------------------
+a
+Process PID : 0 Runing.
+delete PCB ID : 0
+delete PCB ID : 0
+--------------------------------
+In Job Queue:
+ | 1 |  | 2 |
+
+In Ready Queue:
+ | 1 |
+
+In Device Queue:
+
+
+--------------------------------
+Time Interupt!
+press any key and enter
+--------------------------------
+In Job Queue:
+ | 1 |  | 2 |
+
+In Ready Queue:
+ | 1 |
 
 In Device Queue:
 
@@ -23,70 +124,53 @@ Time Interupt!
 press any key and enter
 --------------------------------
 In Job Queue:
- | 4 |  | 5 |
+ | 1 |  | 2 |
 
 In Ready Queue:
- | 3 |
+ | 1 |
 
 In Device Queue:
 
 
 --------------------------------
 a
-start IO PID : 3
+copy PCB ID : 2
 Time Interupt!
 press any key and enter
 --------------------------------
 In Job Queue:
- | 4 |  | 5 |
+ | 1 |  | 2 |
 
 In Ready Queue:
-
-
-In Device Queue:
- | 3 |
-
---------------------------------
-a
-end IO PID : 3
-Time Interupt!
-press any key and enter
---------------------------------
-In Job Queue:
- | 4 |  | 5 |
-
-In Ready Queue:
- | 3 |
+ | 1 |  | 2 |
 
 In Device Queue:
 
 
 --------------------------------
 a
-Time Interupt!
-press any key and enter
+Process PID : 1 Runing.
+delete PCB ID : 1
+delete PCB ID : 1
 --------------------------------
 In Job Queue:
- | 5 |
+ | 2 |
 
 In Ready Queue:
- | 3 |  | 4 |
+ | 2 |
 
 In Device Queue:
 
 
 --------------------------------
-a
-Process PID : 3 Runing.
-Process completed. delete PCB ID : 3
 Time Interupt!
 press any key and enter
 --------------------------------
 In Job Queue:
- | 5 |
+ | 2 |
 
 In Ready Queue:
- | 4 |
+ | 2 |
 
 In Device Queue:
 
@@ -97,76 +181,45 @@ Time Interupt!
 press any key and enter
 --------------------------------
 In Job Queue:
- | 5 |
+ | 2 |
 
 In Ready Queue:
- | 4 |
+ | 2 |
 
 In Device Queue:
 
 
 --------------------------------
 a
+copy PCB ID : 2
 Time Interupt!
 press any key and enter
+--------------------------------
+In Job Queue:
+ | 2 |
+
+In Ready Queue:
+ | 2 |
+
+In Device Queue:
+
+
+--------------------------------
+a
+Process PID : 2 Runing.
+delete PCB ID : 2
+delete PCB ID : 2
 --------------------------------
 In Job Queue:
 
 
 In Ready Queue:
- | 4 |  | 5 |
+
 
 In Device Queue:
 
 
 --------------------------------
-a
-Process PID : 4 Runing.
-Process completed. delete PCB ID : 4
-Time Interupt!
-press any key and enter
---------------------------------
-In Job Queue:
-
-
-In Ready Queue:
- | 5 |
-
-In Device Queue:
-
-
---------------------------------
-a
-Time Interupt!
-press any key and enter
---------------------------------
-In Job Queue:
-
-
-In Ready Queue:
- | 5 |
-
-In Device Queue:
-
-
---------------------------------
-a
-Time Interupt!
-press any key and enter
---------------------------------
-In Job Queue:
-
-
-In Ready Queue:
- | 5 |
-
-In Device Queue:
-
-
---------------------------------
-a
-Process PID : 5 Runing.
-Process completed. delete PCB ID : 5
 Time Interupt!
 press any key and enter
 --------------------------------
@@ -182,6 +235,6 @@ In Device Queue:
 --------------------------------
 a
 queue deleted
-Process completed. delete PCB ID : 2
-Process completed. delete PCB ID : 1
-Process completed. delete PCB ID : 0
+delete PCB ID : 2
+delete PCB ID : 1
+delete PCB ID : 0

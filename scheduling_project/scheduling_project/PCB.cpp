@@ -25,7 +25,7 @@ ProcessControlBlock::ProcessControlBlock(const Priority prior,const IOStatus has
 
 ProcessControlBlock::ProcessControlBlock(const ProcessControlBlock& PCB) : process_id(PCB.GetPID())
 {
-    cout << "Process constructed. constructed PCB ID : " << this->GetPID() << endl;
+    cout << "copy PCB ID : " << this->GetPID() << endl;
     next_pcb = nullptr;
     state = Status::new_;
     have_IO = PCB.HaveIO();
@@ -35,7 +35,7 @@ ProcessControlBlock::ProcessControlBlock(const ProcessControlBlock& PCB) : proce
 
 ProcessControlBlock::~ProcessControlBlock()
 {
-    cout << "Process completed. delete PCB ID : " << this->GetPID() << endl;
+    cout << "delete PCB ID : " << this->GetPID() << endl;
 }
 
 IOStatus ProcessControlBlock::HaveIO()const

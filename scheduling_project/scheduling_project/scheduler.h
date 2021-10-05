@@ -24,7 +24,6 @@ public:
     void TimeExeption();
     void LoadPCBs(ProcessControlBlock const& pcbs); //Stack to Heap.. malloc Node
     bool IsEmpty()const;
-    
     //void SortQueue(); // call Job ready device queue sort
 
     // LEVEL2 API
@@ -36,8 +35,9 @@ public:
     ProcessControlBlock* ReadyPop();
     void DevicePush(const ProcessControlBlock& PCB); 
     ProcessControlBlock* DevicePop(); // IO true -> false
-    void CpuProcess(ProcessControlBlock& PCB); //free PCB // status runing -> terminated 
+    void CpuProcess(ProcessControlBlock& PCB); //free PCB, call DeleteJobQueueItem 
     void PrintQueue() const; // print Job ready device queue status
+
     // LEVEL3 API
     void DeleteJobQueueItem(ProcessControlBlock& PCB); //free PCB
 

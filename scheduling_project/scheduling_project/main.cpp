@@ -18,14 +18,12 @@ int main()
 
     while(!scheduler.IsEmpty()) // 다음엔 긍정인 의미의 변수 이름 쓰기.
     {
-        //scheduler.TimeExeption();
-        scheduler.PrintQueue();
+        scheduler.TimeExeption();
         scheduler.LongTermScheduling();
-        scheduler.PrintQueue();
-        //scheduler.TimeExeption();
+        scheduler.TimeExeption();
         scheduler.ShortTermScheduling();
         scheduler.PrintQueue();
-        //scheduler.TimeExeption();
+        scheduler.TimeExeption();
         scheduler.IOScheduling();
     }
     return 0;
