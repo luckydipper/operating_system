@@ -7,7 +7,16 @@ using namespace std;
 //template specialization
 
 template <>
-struct std::less<PCB> :public binary_function<PCB, PCB, bool>
+struct std::greater<PCB> //:public binary_function<PCB, PCB, bool>
+{
+	bool operator() (const PCB& left, const PCB& right) const
+	{
+		return left.GetRestTime() > right.GetRestTime();
+	}
+};
+
+template <>
+struct std::less<PCB>// :public binary_function<PCB, PCB, bool>
 {
 	bool operator() (const PCB& left, const PCB& right) const
 	{
@@ -15,11 +24,10 @@ struct std::less<PCB> :public binary_function<PCB, PCB, bool>
 	}
 };
 
-
 class FIFO
 {
 private:
-	priority_queue<PCB, vector<PCB>, less<PCB>> PCB_queue;
+	priority_queue<PCB, vector<PCB>, greater<PCB>> PCB_queue;
 	//double average_waiting_time; //-1
 	//int processing_pid; // -1
 public:

@@ -1,6 +1,7 @@
 #include "FIFO.hpp"
 #include <iostream>
 
+
 //void FIFO::Dispatch(PCB& pcb)
 //{
 //	//glob clock에 sysnchronize해야 해.
@@ -22,7 +23,7 @@ void FIFO::LoadPcb(const PCB& pcb)
 
 void FIFO::ShowStatus() const
 {
-	priority_queue<PCB> temp_queue{ PCB_queue };
+	priority_queue<PCB,vector<PCB>,greater<PCB>> temp_queue{ PCB_queue };
 
 	cout << "=====================" << endl;
 	while (!temp_queue.empty())
@@ -32,6 +33,7 @@ void FIFO::ShowStatus() const
 	}
 	cout << "\n=====================\n\n" << endl;
 
-	int interupt = 0;
-	cin >> interupt;
+	//char interupt;
+	//cin >> interupt;
+	//cin.clear();
 }
