@@ -17,11 +17,16 @@ int main()
 	PCB pcb_list[] = { p1,p2,p3,p4,p5,p6 };
 	
 	less<PCB> Less{};
+	
+	// template specialize test
 	cout << Less(p3, p1) << Less(p6, p1) << Less(p5, p4) << endl; // 110
 
-	p1.Print();
-	p1.CpuBurst(10);
-	p1.Print();
+	// cpu burst test
+	p1.CpuBurst(5);
+
+	// contant test
+	for (const PCB& inst : pcb_list)
+		inst.Print();
 
 
 	return 0;

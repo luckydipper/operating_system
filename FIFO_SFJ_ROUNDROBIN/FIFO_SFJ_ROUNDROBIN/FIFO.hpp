@@ -23,6 +23,8 @@ private:
 	priority_queue<PCB, vector<PCB>, less<PCB>> PCB_queue;
 public:
 	//FIFO();
+	//Run(); -> while 
+	//ShowStatus()
 };
 
 
