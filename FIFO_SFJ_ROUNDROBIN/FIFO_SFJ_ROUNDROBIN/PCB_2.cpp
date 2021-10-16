@@ -10,9 +10,10 @@ int PCB::number_of_PCB = 0;
 PCB::PCB(const int& arrival_time, const int& rest_burst_time) : ARRIVAL_TIME(arrival_time), rest_burst_time(rest_burst_time),pid(++number_of_PCB)
 {
     waiting_time = -1;
+    should_regist_time = true;
 }
 
-PCB::PCB(const PCB& pcb): ARRIVAL_TIME(pcb.ARRIVAL_TIME), rest_burst_time(pcb.rest_burst_time), pid(pcb.pid), waiting_time(pcb.waiting_time){;}
+PCB::PCB(const PCB& pcb): ARRIVAL_TIME(pcb.ARRIVAL_TIME), rest_burst_time(pcb.rest_burst_time), pid(pcb.pid), waiting_time(pcb.waiting_time), should_regist_time(pcb.should_regist_time){;}
 
 //PCB::PCB(const PCB&& pcb) noexcept : ARRIVAL_TIME(pcb.ARRIVAL_TIME), rest_burst_time(pcb.rest_burst_time), pid(pcb.pid), waiting_time(pcb.waiting_time) { ; }
 
@@ -58,6 +59,18 @@ int PCB::GetWaitingTime() const
 {
     return waiting_time;
 }
+
+bool PCB::ShouldRegistTime() const
+{
+    return should_regist_time;
+}
+
+void PCB::ShouldRegistTime(const bool& setting)
+{
+    should_regist_time = setting;
+}
+
+
 
 // operator = 엔 const 한 member 변수를 초기화 할 수 없음. initialize list 처럼. 어떻게 해야하지?
 const PCB& PCB::operator= (const PCB& pcb)

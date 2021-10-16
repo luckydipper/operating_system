@@ -3,26 +3,8 @@
 #include <queue>
 #include "PCB_2.hpp"
 #include <functional>
+#include "greater_less_specialized_template.hpp"
 using namespace std;
-//template specialization
-
-template <>
-struct std::greater<PCB> //:public binary_function<PCB, PCB, bool>
-{
-	bool operator() (const PCB& left, const PCB& right) const
-	{
-		return left.GetRestTime() > right.GetRestTime();
-	}
-};
-
-template <>
-struct std::less<PCB> :public binary_function<PCB, PCB, bool>
-{
-	bool operator() (const PCB& left, const PCB& right) const
-	{
-		return left.GetRestTime() < right.GetRestTime();
-	}
-};
 
 
 class FIFO
