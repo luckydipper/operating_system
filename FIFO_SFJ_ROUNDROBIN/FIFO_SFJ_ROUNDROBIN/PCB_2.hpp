@@ -8,11 +8,11 @@ private:
     int rest_burst_time;
     int waiting_time;
 public:
-    PCB(const int& arrival_time, const int& rest_burst_time);
+    explicit PCB(const int& arrival_time, const int& rest_burst_time);
     //PCB(const PCB& copied); use default copy constructor
     void Print() const; 
     int GetRestTime() const;
-    //void CpuBurst();
+    void CpuBurst(const int& time);
 };
 
 #endif // !__10_16_PCB__

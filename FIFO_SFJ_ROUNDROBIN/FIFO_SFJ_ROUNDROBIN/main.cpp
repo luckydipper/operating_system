@@ -14,11 +14,15 @@ int main()
 	PCB p4(10, 6);
 	PCB p5(14, 8);
 	PCB p6(15, 7);
-	p1.Print();
+	PCB pcb_list[] = { p1,p2,p3,p4,p5,p6 };
+	
 	less<PCB> Less{};
-	cout << Less(p3, p1); // 1
-	cout << Less(p6, p1); // 1
-	cout << Less(p5, p4); // 0
+	cout << Less(p3, p1) << Less(p6, p1) << Less(p5, p4) << endl; // 110
+
+	p1.Print();
+	p1.CpuBurst(10);
+	p1.Print();
+
 
 	return 0;
 }

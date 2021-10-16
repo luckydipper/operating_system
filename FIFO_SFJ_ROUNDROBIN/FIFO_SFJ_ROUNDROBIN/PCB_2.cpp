@@ -18,3 +18,8 @@ int PCB::GetRestTime() const
 {
     return rest_burst_time;
 }
+
+void PCB::CpuBurst(const int& time)
+{
+    rest_burst_time -= time;
+}
