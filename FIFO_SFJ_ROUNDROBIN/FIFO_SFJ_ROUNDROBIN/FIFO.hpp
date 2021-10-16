@@ -16,7 +16,7 @@ struct std::greater<PCB> //:public binary_function<PCB, PCB, bool>
 };
 
 template <>
-struct std::less<PCB>// :public binary_function<PCB, PCB, bool>
+struct std::less<PCB> :public binary_function<PCB, PCB, bool>
 {
 	bool operator() (const PCB& left, const PCB& right) const
 	{
@@ -28,10 +28,13 @@ class FIFO
 {
 private:
 	priority_queue<PCB, vector<PCB>, greater<PCB>> PCB_queue;
-	//double average_waiting_time; //-1
-	//int processing_pid; // -1
+	double average_waiting_time; //-1
+	int processing_pid; // -1
+	bool is_running;
 public:
-	//FIFO() = default;
+	FIFO();
+	void Run();
+	bool IsRuning() const;
 	//void Dispatch(PCB& pcb);
 	void LoadPcb(const PCB& pcb);
 
