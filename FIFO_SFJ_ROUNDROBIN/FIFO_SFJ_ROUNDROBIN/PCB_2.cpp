@@ -79,5 +79,6 @@ const PCB& PCB::operator= (const PCB& pcb)
     rest_burst_time = pcb.rest_burst_time;
     waiting_time = pcb.rest_burst_time;
     pid = pcb.pid;
-    return pcb;
+    should_regist_time = pcb.should_regist_time;
+    return *this;
 }

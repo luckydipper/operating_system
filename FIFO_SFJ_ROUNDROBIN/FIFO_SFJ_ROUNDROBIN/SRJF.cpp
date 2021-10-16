@@ -30,10 +30,13 @@ void SRJF::Dispatch()
 	{
 		ShowStatus();
 	}
-	//register pid PCB
+
+
+	// 
 	processing_pid = PCB_queue.top().GetPid();
 	processing_PCB = PCB_queue.top();
 
+	//check processing_PCB rest time
 	if (processing_PCB.GetRestTime() == 0)
 	{
 		cout << "PID : " << processing_pid << " Complete." << endl;
@@ -42,30 +45,23 @@ void SRJF::Dispatch()
 		return;
 	}
 
+	PCB_queue.pop();
+	processing_PCB.CpuBurst(1);
+
+
 	// 처음 시작 할 때, average wait time을 계산함.
-	if (PCB_queue.top().ShouldRegistTime())
+	if (processing_PCB.ShouldRegistTime())
 	{
 		//((PCB)PCB_queue.top()).SetWaitingTime(inner_clock);
 		num_of_process++;
 		sum_waiting_time += inner_clock;
 		average_waiting_time = sum_waiting_time / num_of_process;
-
-		PCB false_should_register{ PCB_queue.top() };
-		PCB_queue.pop();
-
-		false_should_register.ShouldRegistTime(false);//////////// 강제 변환 .........하아 observer야... 복사해서 
-		processing_PCB.CpuBurst(1);
-		false_should_register.CpuBurst(1);
-		PCB_queue.push(false_should_register);
 		ShowStatus();
-		return;
 	}
 
-	
-	PCB_queue.pop();
-	processing_PCB.CpuBurst(1);
-	PCB_queue.push(processing_PCB);
-
+	PCB regists_flag_false{ processing_PCB };
+	regists_flag_false.ShouldRegistTime(false);
+	PCB_queue.push(regists_flag_false);
  }
 
 void SRJF::LoadPcb(const PCB& pcb)
