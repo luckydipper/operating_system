@@ -1,12 +1,10 @@
-#ifndef __10_16_RR_SCHEDULING__
-#define __10_16_RR_SCHEDULING__
+#ifndef __10_16_RoundRobin_SCHEDULING__
+#define __10_16_RoundRobin_SCHEDULING__
 #include <queue>
 #include "PCB_2.hpp"
 #include "greater_less_specialized_template.hpp"
 using namespace std;
 //template specialization
-
-
 
 class RoundRobin
 {
@@ -25,7 +23,6 @@ public:
 	bool IsRuning() const;
 	void Dispatch();
 	void LoadPcb(const PCB& pcb);
-
 
 	// Level2 API
 	void ShowStatus() const; // Load, cpu burst ³¡³¯ ¶§. 

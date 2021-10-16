@@ -147,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FIFO.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SRJF_main.cpp" />
     <ClCompile Include="PCB_2.cpp" />
     <ClCompile Include="RR.cpp" />
     <ClCompile Include="SRJF.cpp" />

@@ -30,9 +30,7 @@ void SRJF::Dispatch()
 	{
 		ShowStatus();
 	}
-
-
-	// 
+ 
 	processing_pid = PCB_queue.top().GetPid();
 	processing_PCB = PCB_queue.top();
 
