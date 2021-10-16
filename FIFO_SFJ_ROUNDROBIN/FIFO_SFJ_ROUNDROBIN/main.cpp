@@ -33,19 +33,17 @@ int main()
 
 	while (scheduling_algorithm.IsRuning())
 	{
-
-		// Load PCB using arrival time. reset waitting time
+	// Load PCB using arrival time. reset waitting time
 		for (PCB& pcb : process_list)
 		{
 			if (pcb.GetArrivalTime() == inner_clock)
 			{
-				pcb.SetWaitingTime(inner_clock);
 				scheduling_algorithm.LoadPcb(pcb);
 			}
 		}
 
-
-
+		//SortTermScheduling 
+		scheduling_algorithm.Dispatch();
 		inner_clock++;
 	}
 

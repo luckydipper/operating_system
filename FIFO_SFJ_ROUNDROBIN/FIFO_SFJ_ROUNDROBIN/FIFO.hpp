@@ -34,8 +34,9 @@ private:
 public:
 	FIFO();
 	void Run();
+	void Kill();
 	bool IsRuning() const;
-	//void Dispatch(PCB& pcb);
+	void Dispatch();
 	void LoadPcb(const PCB& pcb);
 
 

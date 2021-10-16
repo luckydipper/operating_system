@@ -3,7 +3,7 @@
 
 extern int inner_clock;
 
-FIFO::FIFO():average_waiting_time(0), processing_pid(-1), is_running(false)
+FIFO::FIFO() :average_waiting_time(0), processing_pid(-1), is_running(false)
 {}
 
 void FIFO::Run()
@@ -51,13 +51,13 @@ void FIFO::LoadPcb(const PCB& pcb)
 
 void FIFO::UpdateAverageWaiting(const PCB& pcb)
 {
-// 내부 순환 해야하네, 이럴거면 그냥 dequeue 쓸껄 그랬나?
-//	average_waiting_time = ( average_waiting_time + inner_clock ) / PCB_queue.size();
+	// 내부 순환 해야하네, 이럴거면 그냥 dequeue 쓸껄 그랬나?
+	//	average_waiting_time = ( average_waiting_time + inner_clock ) / PCB_queue.size();
 }
 
 void FIFO::ShowStatus() const
 {
-	priority_queue<PCB,vector<PCB>,greater<PCB>> temp_queue{ PCB_queue };
+	priority_queue<PCB, vector<PCB>, greater<PCB>> temp_queue{ PCB_queue };
 
 	cout << "=====================" << endl;
 	cout << "Inner Clock " << inner_clock << endl;
