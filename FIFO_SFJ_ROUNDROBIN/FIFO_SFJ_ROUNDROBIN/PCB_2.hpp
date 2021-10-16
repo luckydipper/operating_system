@@ -22,7 +22,7 @@ public:
 
     void CpuBurst(const int& time);
     void SetWaitingTime(const int& time);
-
+    int GetWaitingTime() const;
     // STL에 들어가는 객체엔 operator =가 들어가야함
     const PCB& operator= (const PCB& pcb);
 };

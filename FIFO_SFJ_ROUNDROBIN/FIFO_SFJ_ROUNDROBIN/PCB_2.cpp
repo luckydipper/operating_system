@@ -53,6 +53,13 @@ void PCB::SetWaitingTime(const int& time)
     waiting_time = time;
 }
 
+
+int PCB::GetWaitingTime() const
+{
+    return waiting_time;
+}
+
+// operator = 엔 const 한 member 변수를 초기화 할 수 없음. initialize list 처럼. 어떻게 해야하지?
 const PCB& PCB::operator= (const PCB& pcb)
 {
     ARRIVAL_TIME = pcb.ARRIVAL_TIME;

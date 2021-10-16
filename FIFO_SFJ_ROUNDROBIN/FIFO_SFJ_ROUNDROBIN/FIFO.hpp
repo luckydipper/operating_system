@@ -40,7 +40,7 @@ public:
 
 
 	// Level2 API
-	//void UpdateAverageWaiting(); // load, cpu burst 끝날 때. 
+	void UpdateAverageWaiting(const PCB& pcb); // load, cpu burst 끝날 때. 
 	void ShowStatus() const; // Load, cpu burst 끝날 때. 
 
 };
