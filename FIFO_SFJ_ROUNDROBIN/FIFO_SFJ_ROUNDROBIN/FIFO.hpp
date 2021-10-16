@@ -24,12 +24,16 @@ struct std::less<PCB> :public binary_function<PCB, PCB, bool>
 	}
 };
 
+
 class FIFO
 {
 private:
 	priority_queue<PCB, vector<PCB>, greater<PCB>> PCB_queue;
+	int sum_waiting_time;
+	int num_of_process;
 	double average_waiting_time; //-1
 	int processing_pid; // -1
+	PCB processing_PCB;
 	bool is_running;
 public:
 	FIFO();
@@ -41,7 +45,6 @@ public:
 
 
 	// Level2 API
-	void UpdateAverageWaiting(const PCB& pcb); // load, cpu burst 끝날 때. 
 	void ShowStatus() const; // Load, cpu burst 끝날 때. 
 
 };

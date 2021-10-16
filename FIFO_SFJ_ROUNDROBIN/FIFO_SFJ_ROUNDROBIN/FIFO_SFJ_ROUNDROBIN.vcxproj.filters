@@ -21,6 +21,12 @@
     <ClInclude Include="FIFO.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RR.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SRJF.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCB_2.cpp">
@@ -30,6 +36,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FIFO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SRJF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
