@@ -25,10 +25,6 @@ bool FIFO::IsRuning() const
 // 1씩 깍아. 처리하고 있는 pid 있으면 기다려.
 void FIFO::Dispatch()
 {
-	//glob clock에 sysnchronize해야 해.
-	//processing_pid = PCB_queue.top().GetPid();
-	//UpdateAverageWaiting(pcb);
-
 
 	if (PCB_queue.size() == 0)
 	{
@@ -38,20 +34,20 @@ void FIFO::Dispatch()
 	if (processing_pid == -1)
 	{
 
-		cout << "PID : " << PCB_queue.top().GetPid() << " Start!" << endl;
+		cout << "PID : " << PCB_queue.front().GetPid() << " Start!" << endl;
 
 		//register pid PCB
-		processing_pid = PCB_queue.top().GetPid();
-		processing_PCB = PCB_queue.top();
+		processing_pid = PCB_queue.front().GetPid();
+		processing_PCB = PCB_queue.front();
 
-		((PCB)PCB_queue.top()).SetWaitingTime(inner_clock); //////////////////// 강제로 넣음.
+		((PCB)PCB_queue.front()).SetWaitingTime(inner_clock); //////////////////// 강제로 넣음.
 
 		num_of_process++;
 		sum_waiting_time += inner_clock;
 		average_waiting_time = sum_waiting_time / num_of_process;
 
 		processing_PCB.CpuBurst(1);
-		PCB_queue.pop();
+		PCB_queue.pop_front();
 		ShowStatus();
 		return;
 	}
@@ -63,31 +59,36 @@ void FIFO::Dispatch()
 	}
 	else
 		processing_PCB.CpuBurst(1);
-	//PCB_queue.top().CpuBurst(1);
+	//PCB_queue.front().CpuBurst(1);
 }
 
 void FIFO::LoadPcb(const PCB& pcb)
 {
-	PCB_queue.push(pcb);
+	cout << "PID : " << pcb.GetPid() << " Load!" << endl;
+	PCB_queue.push_back(pcb);
 	ShowStatus();
 }
 
 
 void FIFO::ShowStatus() const
 {
-	priority_queue<PCB,vector<PCB>,greater<PCB>> temp_queue{ PCB_queue };
+	deque<PCB> temp_queue{ PCB_queue };
 
 	cout << "=====================" << endl;
 	cout << "Inner Clock " << inner_clock << endl;
 	if (processing_pid == -1)
 		cout << "run Nothing" << endl;
 	else
+	{
 		cout << "PID : " << processing_pid << " is running!" << endl;
+		cout << "Rest burst time : " << processing_PCB.GetRestTime() << endl;
+		cout << "\nStatus" << endl;
+	}
 
 	while (!temp_queue.empty())
 	{
-		cout << "|PID : " << temp_queue.top().GetPid() << "| ";
-		temp_queue.pop();
+		cout << "|PID : " << temp_queue.front().GetPid() << "| ";
+		temp_queue.pop_front();
 	}
 	cout << "\naverage waitting time : " << average_waiting_time << endl;
 
