@@ -18,12 +18,6 @@
     <ClInclude Include="PCB_2.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RR.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SRJF.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="greater_less_specialized_template.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -35,13 +29,10 @@
     <ClCompile Include="PCB_2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RR.cpp">
+    <ClCompile Include="FIFO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SRJF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FIFO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SRJF_main.cpp">

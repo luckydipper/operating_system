@@ -3,7 +3,6 @@
 
 extern int inner_clock;
 
-
 RoundRobin::RoundRobin() : sum_waiting_time(0), average_waiting_time(0), num_of_process(0), processing_pid(-1), is_running(false), processing_PCB(PCB(-1, -1))
 {
 }
@@ -32,8 +31,6 @@ void RoundRobin::Dispatch()
 		ShowStatus();
 	}
 
-
-	// 
 	processing_pid = PCB_queue.top().GetPid();
 	processing_PCB = PCB_queue.top();
 
