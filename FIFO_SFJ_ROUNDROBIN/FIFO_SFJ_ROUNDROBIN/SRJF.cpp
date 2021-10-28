@@ -29,6 +29,11 @@ void SRJF::Dispatch()
 	if (PCB_queue.size() == 0)
 	{
 		ShowStatus();
+		if (processing_PCB.GetRestTime() == 0)
+		{
+			cout << "PID : " << processing_pid << " Complete." << endl;
+			exit(0);
+		}
 	}
  
 	processing_pid = PCB_queue.top().GetPid();
