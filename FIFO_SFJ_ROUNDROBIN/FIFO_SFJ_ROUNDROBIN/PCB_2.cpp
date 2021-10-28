@@ -82,3 +82,13 @@ const PCB& PCB::operator= (const PCB& pcb)
     should_regist_time = pcb.should_regist_time;
     return *this;
 }
+
+
+
+const bool PCB::operator ==(const PCB& pcb)
+{
+    if (pid == pcb.pid)
+        return true;
+    else
+        return false;
+}

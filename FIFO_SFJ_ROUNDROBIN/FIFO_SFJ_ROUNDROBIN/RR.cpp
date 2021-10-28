@@ -1,7 +1,10 @@
 #include "RR.hpp"
 #include <iostream>
+#include "greater_less_specialized_template.hpp"
+#include <algorithm>
 
 extern int inner_clock;
+extern int time_quantum;
 
 RoundRobin::RoundRobin() : sum_waiting_time(0), average_waiting_time(0), num_of_process(0), processing_pid(-1), is_running(false), processing_PCB(PCB(-1, -1))
 {
@@ -25,71 +28,83 @@ bool RoundRobin::IsRuning() const
 // 1씩 깍아. 처리하고 있는 pid 있으면 기다려.
 void RoundRobin::Dispatch()
 {
-	// 모든 process가 끝나도 화면에 출력되도록 함.
+	
+	// 모든 process가 끝나면 종료
 	if (PCB_queue.size() == 0)
 	{
 		ShowStatus();
+		if (processing_PCB.GetRestTime() == 0)
+		{
+			cout << "PID : " << processing_PCB.GetPid() << " Complete." << endl;
+			exit(0);
+		}
+		processing_PCB.CpuBurst(1);
+		return;
 	}
 
-	processing_pid = PCB_queue.top().GetPid();
-	processing_PCB = PCB_queue.top();
-
-	//check processing_PCB rest time
-	if (processing_PCB.GetRestTime() == 0)
+	if (processing_PCB.GetRestTime() <= 0)
 	{
 		cout << "PID : " << processing_pid << " Complete." << endl;
-		PCB_queue.pop();
+		PCB_queue.pop_front();
 		ShowStatus();
 		return;
 	}
 
-	PCB_queue.pop();
+
+	if (processing_PCB.GetRestTime() == 0)
+	{
+		PCB_queue.erase(std::remove(PCB_queue.begin(), PCB_queue.end(), processing_PCB), PCB_queue.end());
+	}
+
+	int processing_index = (inner_clock / time_quantum + 1) % PCB_queue.size();
+	processing_PCB = PCB_queue[processing_index];
 	processing_PCB.CpuBurst(1);
 
-
-	// 처음 시작 할 때, average wait time을 계산함.
 	if (processing_PCB.ShouldRegistTime())
 	{
 		//((PCB)PCB_queue.top()).SetWaitingTime(inner_clock);
 		num_of_process++;
-		sum_waiting_time += inner_clock;
+		sum_waiting_time += (inner_clock - processing_PCB.GetArrivalTime());
 		average_waiting_time = sum_waiting_time / num_of_process;
 		ShowStatus();
+		processing_PCB.ShouldRegistTime(false);
 	}
 
-	PCB regists_flag_false{ processing_PCB };
-	regists_flag_false.ShouldRegistTime(false);
-	PCB_queue.push(regists_flag_false);
+
+	
+
 }
 
 void RoundRobin::LoadPcb(const PCB& pcb)
 {
 	cout << "PID : " << pcb.GetPid() << " Load!" << endl;
-	PCB_queue.push(pcb);
-	ShowStatus();
+	PCB_queue.push_back(pcb);
+	sort(PCB_queue.begin(), PCB_queue.end(), less_than_key());
 }
 
 
 void RoundRobin::ShowStatus() const
 {
-	priority_queue<PCB, vector<PCB>, greater<PCB>> temp_queue{ PCB_queue };
 
 	cout << "=====================" << endl;
 	cout << "Inner Clock " << inner_clock << endl;
-	if (processing_pid == -1)
+
+	if (processing_PCB.GetPid() == -1)
+	{
 		cout << "run Nothing" << endl;
+	}
 	else
 	{
-		cout << "PID : " << processing_pid << " is running!" << endl;
+		cout << "PID : " << processing_PCB.GetPid() << " is running!" << endl;
 		cout << "Rest burst time : " << processing_PCB.GetRestTime() << endl;
 		cout << "\nStatus" << endl;
 	}
 
-	while (!temp_queue.empty())
+	for (const PCB& pcb: PCB_queue)
 	{
-		cout << "|PID : " << temp_queue.top().GetPid() << "| ";
-		temp_queue.pop();
+		cout << "|PID : " << pcb.GetPid() << "| ";
 	}
+
 	cout << "\naverage waitting time : " << average_waiting_time << endl;
 
 	cout << "\n=====================\n\n" << endl;

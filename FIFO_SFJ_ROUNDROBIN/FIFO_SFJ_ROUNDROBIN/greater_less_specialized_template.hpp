@@ -23,5 +23,14 @@ struct std::less<PCB> :public binary_function<PCB, PCB, bool>
 };
 
 
+struct less_than_key
+{
+	inline bool operator() (const PCB& struct1, const PCB& struct2)
+	{
+		return (struct1.GetRestTime() < struct2.GetRestTime());
+	}
+};
+
+
 
 #endif // !greater_less_specialized_template_10_16

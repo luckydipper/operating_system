@@ -29,6 +29,8 @@ public:
 
     // STL에 들어가는 객체엔 operator =가 들어가야함
     const PCB& operator= (const PCB& pcb);
+
+    const bool operator ==(const PCB& pcb);
 };
 
 #endif // !__10_16_PCB__
