@@ -142,12 +142,14 @@
     <ClInclude Include="FIFO.hpp" />
     <ClInclude Include="greater_less_specialized_template.hpp" />
     <ClInclude Include="PCB_2.hpp" />
+    <ClInclude Include="RR.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FIFO.cpp" />
     <ClCompile Include="PCB_2.cpp" />
+    <ClCompile Include="RR.cpp" />
+    <ClCompile Include="RR_main.cpp" />
     <ClCompile Include="SRJF.cpp" />
-    <ClCompile Include="SRJF_main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

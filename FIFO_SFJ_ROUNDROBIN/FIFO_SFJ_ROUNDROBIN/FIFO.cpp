@@ -29,6 +29,12 @@ void FIFO::Dispatch()
 	if (PCB_queue.size() == 0)
 	{
 		ShowStatus();
+		if (processing_PCB.GetRestTime() == 0)
+		{
+			cout << "PID : " << processing_pid << " Complete." << endl;
+			processing_pid = -1;
+			exit(0);
+		}
 	}
 
 	if (processing_pid == -1)
@@ -43,7 +49,7 @@ void FIFO::Dispatch()
 		((PCB)PCB_queue.front()).SetWaitingTime(inner_clock); //////////////////// 강제로 넣음.
 
 		num_of_process++;
-		sum_waiting_time += inner_clock;
+		sum_waiting_time += inner_clock - processing_PCB.GetArrivalTime();
 		average_waiting_time = sum_waiting_time / num_of_process;
 
 		processing_PCB.CpuBurst(1);

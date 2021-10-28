@@ -57,7 +57,7 @@ void SRJF::Dispatch()
 	{
 		//((PCB)PCB_queue.top()).SetWaitingTime(inner_clock);
 		num_of_process++;
-		sum_waiting_time += inner_clock;
+		sum_waiting_time += inner_clock - processing_PCB.GetArrivalTime();
 		average_waiting_time = sum_waiting_time / num_of_process;
 		ShowStatus();
 	}
