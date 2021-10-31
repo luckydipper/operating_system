@@ -12,7 +12,7 @@ int inner_clock = 0;
 
 using namespace std;
 
-int main()
+int main()	
 {
 	PCB p1(0, 10);
 	PCB p2(3, 12);

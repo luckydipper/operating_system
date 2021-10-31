@@ -1,15 +1,15 @@
-#ifndef __10_16_RoundRobin_SCHEDULING__
-#define __10_16_RoundRobin_SCHEDULING__
+#ifndef __10_16_SRJF_SCHEDULING__
+#define __10_16_SRJF_SCHEDULING__
 #include <queue>
 #include "PCB_2.hpp"
 #include "greater_less_specialized_template.hpp"
 using namespace std;
 //template specialization
 
-class RoundRobin
+class SRJF
 {
 private:
-	deque<PCB> PCB_queue;
+	priority_queue<PCB, vector<PCB>, greater<PCB>> PCB_queue;
 	int sum_waiting_time;
 	int num_of_process;
 	double average_waiting_time; //-1
@@ -17,7 +17,7 @@ private:
 	PCB processing_PCB;
 	bool is_running;
 public:
-	RoundRobin();
+	SRJF();
 	void Run();
 	void Kill();
 	bool IsRuning() const;

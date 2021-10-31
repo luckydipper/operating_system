@@ -1,80 +1,74 @@
-#include "RR.hpp"
+#include "FIFO.hpp"
 #include <iostream>
 
 extern int inner_clock;
-extern int time_quantum;
-RoundRobin::RoundRobin() : sum_waiting_time(0), average_waiting_time(0), num_of_process(0), processing_pid(-1), is_running(false), processing_PCB(PCB(-1, -1))
+
+FIFO::FIFO(): sum_waiting_time(0),average_waiting_time(0), num_of_process(0), processing_pid(-1), is_running(false),processing_PCB(PCB(-1,-1))
 {
 }
 
-void RoundRobin::Run()
+void FIFO::Run()
 {
 	is_running = true;
 }
 
-void RoundRobin::Kill()
+void FIFO::Kill()
 {
 	is_running = false;
 }
 
-bool RoundRobin::IsRuning() const
+bool FIFO::IsRuning() const
 {
 	return is_running;
 }
 
 // 1씩 깍아. 처리하고 있는 pid 있으면 기다려.
-void RoundRobin::Dispatch()
+void FIFO::Dispatch()
 {
-	// 모든 process가 끝나도 화면에 출력되도록 함.
+
 	if (PCB_queue.size() == 0)
 	{
 		ShowStatus();
 		if (processing_PCB.GetRestTime() == 0)
 		{
 			cout << "PID : " << processing_pid << " Complete." << endl;
+			processing_pid = -1;
 			exit(0);
 		}
-
-	}
- 	int current_index = (inner_clock / time_quantum) % PCB_queue.size();
-
-	int temp = processing_pid;
-	processing_pid = PCB_queue[current_index].GetPid();
-	processing_PCB = PCB_queue[current_index];
-	if (processing_pid != temp)
-	{
-		cout << "Context switching" << endl;
-		ShowStatus();
 	}
 
-	//check processing_PCB rest time
-	if (processing_PCB.GetRestTime() == 0)
+	if (processing_pid == -1)
 	{
-		cout << "PID : " << processing_pid << " Complete." << endl;
-		PCB_queue.erase(PCB_queue.begin() + current_index);
-		current_index ++;
+
+		cout << "PID : " << PCB_queue.front().GetPid() << " Start!" << endl;
+
+		//register pid PCB
+		processing_pid = PCB_queue.front().GetPid();
+		processing_PCB = PCB_queue.front();
+
+		((PCB)PCB_queue.front()).SetWaitingTime(inner_clock); //////////////////// 강제로 넣음.
+
+		num_of_process++;
+		sum_waiting_time += inner_clock - processing_PCB.GetArrivalTime();
+		average_waiting_time = sum_waiting_time / num_of_process;
+
+		processing_PCB.CpuBurst(1);
+		PCB_queue.pop_front();
 		ShowStatus();
 		return;
 	}
-
-	processing_PCB.CpuBurst(1);
-
-
-	// 처음 시작 할 때, average wait time을 계산함.
-	if (processing_PCB.ShouldRegistTime())
+	else if (processing_PCB.GetRestTime() == 0)
 	{
-		//((PCB)PCB_queue.top()).SetWaitingTime(inner_clock);
-		num_of_process++;
-		sum_waiting_time += inner_clock;
-		average_waiting_time = sum_waiting_time / num_of_process;
+		cout << "PID : " << processing_pid << " Complete." << endl;
+		processing_pid = -1;
 		ShowStatus();
 	}
-
-	processing_PCB.ShouldRegistTime(false);
-	PCB_queue[current_index] = processing_PCB;
+	else
+		processing_PCB.CpuBurst(1);
+	//PCB_queue.front().CpuBurst(1);
 }
 
-void RoundRobin::LoadPcb(const PCB& pcb)
+void FIFO::LoadPcb(const PCB& pcb)
 {
 	cout << "PID : " << pcb.GetPid() << " Load!" << endl;
 	PCB_queue.push_back(pcb);
@@ -82,7 +76,7 @@ void RoundRobin::LoadPcb(const PCB& pcb)
 }
 
 
-void RoundRobin::ShowStatus() const
+void FIFO::ShowStatus() const
 {
 	deque<PCB> temp_queue{ PCB_queue };
 
@@ -110,7 +104,7 @@ void RoundRobin::ShowStatus() const
 	char interupt;
 	cin >> interupt;
 	if (interupt == 'q')
-		((RoundRobin*)this)->Kill();
+		((FIFO*)this)->Kill();
 	cout << '\n';
 	//cin.clear();
 }

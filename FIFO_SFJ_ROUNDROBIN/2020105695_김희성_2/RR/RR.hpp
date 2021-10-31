@@ -9,7 +9,7 @@ using namespace std;
 class RoundRobin
 {
 private:
-	deque<PCB> PCB_queue;
+	priority_queue<PCB, vector<PCB>, greater<PCB>> PCB_queue;
 	int sum_waiting_time;
 	int num_of_process;
 	double average_waiting_time; //-1

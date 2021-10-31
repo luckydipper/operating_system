@@ -8,7 +8,7 @@
 #include <deque>
 
 int inner_clock = 0;
-int time_quantum = 3;
+
 using namespace std;
 
 int main()
@@ -24,7 +24,8 @@ int main()
 
 	//a1,a2,a3
 	deque<PCB> process_list{ p1,p2,p3,p4,p5,p6 }; // copy constructor에 explicit 하면 이렇게 코딩이 안됨. malloc 쓰면 문제 될 듯. 이동생성자 같은 것으로 극복가능할듯
-	
+	int time_quantum = 3;
+
 	RoundRobin RoundRobin_algorithm{};
 	RoundRobin_algorithm.Run();
 	while (RoundRobin_algorithm.IsRuning())

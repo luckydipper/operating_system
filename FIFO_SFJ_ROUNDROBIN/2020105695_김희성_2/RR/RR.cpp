@@ -2,7 +2,7 @@
 #include <iostream>
 
 extern int inner_clock;
-extern int time_quantum;
+
 RoundRobin::RoundRobin() : sum_waiting_time(0), average_waiting_time(0), num_of_process(0), processing_pid(-1), is_running(false), processing_PCB(PCB(-1, -1))
 {
 }
@@ -29,34 +29,21 @@ void RoundRobin::Dispatch()
 	if (PCB_queue.size() == 0)
 	{
 		ShowStatus();
-		if (processing_PCB.GetRestTime() == 0)
-		{
-			cout << "PID : " << processing_pid << " Complete." << endl;
-			exit(0);
-		}
-
 	}
- 	int current_index = (inner_clock / time_quantum) % PCB_queue.size();
 
-	int temp = processing_pid;
-	processing_pid = PCB_queue[current_index].GetPid();
-	processing_PCB = PCB_queue[current_index];
-	if (processing_pid != temp)
-	{
-		cout << "Context switching" << endl;
-		ShowStatus();
-	}
+	processing_pid = PCB_queue.top().GetPid();
+	processing_PCB = PCB_queue.top();
 
 	//check processing_PCB rest time
 	if (processing_PCB.GetRestTime() == 0)
 	{
 		cout << "PID : " << processing_pid << " Complete." << endl;
-		PCB_queue.erase(PCB_queue.begin() + current_index);
-		current_index ++;
+		PCB_queue.pop();
 		ShowStatus();
 		return;
 	}
 
+	PCB_queue.pop();
 	processing_PCB.CpuBurst(1);
 
 
@@ -70,21 +57,22 @@ void RoundRobin::Dispatch()
 		ShowStatus();
 	}
 
-	processing_PCB.ShouldRegistTime(false);
-	PCB_queue[current_index] = processing_PCB;
+	PCB regists_flag_false{ processing_PCB };
+	regists_flag_false.ShouldRegistTime(false);
+	PCB_queue.push(regists_flag_false);
 }
 
 void RoundRobin::LoadPcb(const PCB& pcb)
 {
 	cout << "PID : " << pcb.GetPid() << " Load!" << endl;
-	PCB_queue.push_back(pcb);
+	PCB_queue.push(pcb);
 	ShowStatus();
 }
 
 
 void RoundRobin::ShowStatus() const
 {
-	deque<PCB> temp_queue{ PCB_queue };
+	priority_queue<PCB, vector<PCB>, greater<PCB>> temp_queue{ PCB_queue };
 
 	cout << "=====================" << endl;
 	cout << "Inner Clock " << inner_clock << endl;
@@ -99,8 +87,8 @@ void RoundRobin::ShowStatus() const
 
 	while (!temp_queue.empty())
 	{
-		cout << "|PID : " << temp_queue.front().GetPid() << "| ";
-		temp_queue.pop_front();
+		cout << "|PID : " << temp_queue.top().GetPid() << "| ";
+		temp_queue.pop();
 	}
 	cout << "\naverage waitting time : " << average_waiting_time << endl;
 
