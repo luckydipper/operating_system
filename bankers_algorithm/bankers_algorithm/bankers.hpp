@@ -16,7 +16,7 @@ private:
 
 public:
 	BankerAlgorithm(const int &num_process, const int &num_resource);
-	bool Request(const int &process_index, const vector<int> &req);
+	bool Request(const int &process_index, const vector<int> &require);
 	bool FindSequence() const;
 
 	void SetMax(const vector<vector<int>>& set);

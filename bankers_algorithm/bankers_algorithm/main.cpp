@@ -21,13 +21,13 @@ int main()
 
 	vector<int> available = {3,2,1,1};
 
-
+	vector<int> request = { 1,2,0,0 };
 
 	bankers_algorithm.SetMax(max);
 	bankers_algorithm.SetAlloc(alloc);
 	bankers_algorithm.SetNeed();
 	bankers_algorithm.SetAvaiable(available);
-	
+	bool requested = bankers_algorithm.Request(4, request); //p4의 index가 3이기 때문.
 
 	return 0;
 }
