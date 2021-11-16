@@ -9,10 +9,20 @@ class BankerAlgorithm
 private:
 	static const int NUM_OF_PROCESS;
 	static const int NUM_OF_RESOURCE;
-	vector<vector<int>> matrix;
+	vector<vector<int>> max;
+	vector<vector<int>> allocation;
+	vector<vector<int>> needs;
+	vector<int> available;
 
 public:
-	BankerAlgorithm(int num_process, int num_resource);
+	BankerAlgorithm(const int &num_process, const int &num_resource);
+	bool Request(const int &process_index, const vector<int> &req);
+	bool FindSequence() const;
+
+	void SetMax(const vector<vector<int>>& set);
+	void SetAlloc(const vector<vector<int>>& alloc);
+	void SetNeed();
+	void SetAvaiable(const vector<int>& avail);
 };
 
 
