@@ -27,7 +27,8 @@ int main()
 	bankers_algorithm.SetAlloc(alloc);
 	bankers_algorithm.SetNeed();
 	bankers_algorithm.SetAvaiable(available);
-	bool requested = bankers_algorithm.Request(4, request); //p4의 index가 3이기 때문.
+	bool safe = bankers_algorithm.FindSequence();
+	//bool requested = bankers_algorithm.Request(4, request); //p4의 index가 3이기 때문.
 
 	return 0;
 }
