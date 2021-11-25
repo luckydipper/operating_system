@@ -1,5 +1,6 @@
 #include "bankers.hpp"
 #include <vector>
+#include <iostream>
 using namespace std;
 
 BankerAlgorithm::BankerAlgorithm(const int &num_process, const int &num_resource)
@@ -11,7 +12,6 @@ BankerAlgorithm::BankerAlgorithm(const int &num_process, const int &num_resource
 	allocation = max;
 	needs = max;
 	available.resize(num_resource);
-	safe_sequence.resize(num_process);
 }
 
 
@@ -65,6 +65,16 @@ bool operator>=(const vector<int>& left, const vector<int>& right)
 	return true;
 }
 
+// 모든 원소에서 오른쪽 벡터가 크냐
+bool operator<=(const vector<int>& left, const vector<int>& right)
+{
+	for (unsigned int i = 0; i < left.size(); i++)
+	{
+		if (left[i] > right[i])
+			return false;
+	}
+	return true;
+}
 //모든 값이 value와 같냐
 bool operator==(const vector<vector<int>>& left, const int value)
 {
@@ -72,13 +82,18 @@ bool operator==(const vector<vector<int>>& left, const int value)
 	{
 		for (const int& elem : row)
 		{
-			if (elem == value)
+			if (elem != value)
 				return false;
 		}
 	}
 	return true;
 }
 
+void VectorSetInt(vector<int>& left, const int value)
+{
+	for (int& elem : left)
+		elem = value;
+}
 
 
 bool BankerAlgorithm::Request(const int& process_index, const vector<int>& require)
@@ -89,7 +104,7 @@ bool BankerAlgorithm::Request(const int& process_index, const vector<int>& requi
 	available = available - require;
 	needs[process_index] = needs[process_index] - require;
 	allocation[process_index] = allocation[process_index] + require;
-	return true;
+	return FindSequence();
 }
 
 bool operator==(const vector<int>& left, int val)
@@ -102,34 +117,40 @@ bool operator==(const vector<int>& left, int val)
 	return true;
 }
 
+
+
 bool BankerAlgorithm::FindSequence()
 {
-	vector<vector<int>> copy_need = needs;
-	vector<int> copy_available = available;
+	vector<vector<int>> need_processes = needs;
+	vector<int> available_process = available;
 
-	for (int i = 0; i < max.size(); i++)
-	{
-		//needs matrix의 모든 값이 0이면 return 
-		if (copy_need == 0)
-			return true;
-
-		if (copy_available >= copy_need[i])
+	for (int i = 0; i < need_processes.size(); i++)
+	{ 
+		if (need_processes == 0) // all value should be 0
 		{
-			if (copy_need == 0)
-			{
-				safe_sequence.empty();
-				return true;
-			}
-			// 모든 값을 0으로 만듬
-			copy_available = copy_available - copy_need[i];
-			for(auto& elem :copy_need[i])
-				elem = 0; 
-			copy_available = copy_available + max[i];
-			safe_sequence.push_back(i); 
+			cout << "SAFE! There is safe sequence." << endl;
+			for (int& elem : safe_sequence)
+				cout << elem << " -> ";
+			cout << "\n" << endl;
+			return true;
+		}
+		else if (need_processes[i] == 0)
+			continue;
+		else if ( need_processes[i] <= available_process )
+		{
+			available_process = available_process + max[i];
+
+			// set vector's all value 0으로 만듬
+			VectorSetInt(need_processes[i], 0);
+			safe_sequence.push_back(i);
+
+			// search by one 
+			i = -1;
 		}
 	}
+	cout << "There is no safe sequence." << endl;
+	safe_sequence.empty();
 	return false;
-	
 }
 
 void BankerAlgorithm::SetMax(const vector<vector<int>>& set)
@@ -152,4 +173,9 @@ void BankerAlgorithm::SetNeed()
 void BankerAlgorithm::SetAvaiable(const vector<int>& avail)
 {
 	available = avail;
+}
+
+void BankerAlgorithm::EmptySafeSequence()
+{
+	safe_sequence.clear();
 }

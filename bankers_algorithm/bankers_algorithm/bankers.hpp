@@ -22,7 +22,9 @@ public:
 	void SetAlloc(const vector<vector<int>>& alloc);
 	void SetNeed();
 	void SetAvaiable(const vector<int>& avail);
+	void EmptySafeSequence();
 };
 
+bool recursive_find(vector<vector<int>>& from_matrix, vector<int> find_vector);
 
 #endif // !bankers_algorithm_21_11_16
