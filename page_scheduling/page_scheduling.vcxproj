@@ -139,7 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LRU.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="optimal.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LRU.h" />
+    <ClInclude Include="optimal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
